@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_padding_horizontal">8dp</dimen>
+    <dimen name="card_padding_vertical">16dp</dimen>
+    <dimen name="card_four">4dp</dimen>
+    <dimen name="card_radius">18dp</dimen>
+    <dimen name="rv_margin">20dp</dimen>
+
+
+
+
+
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">IsteGelsin</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="line">Not crossed<strike>crossed</strike></string>
+
+    <string name="promotionDiscountPercentage">%1$s TL</string>
+    <string name="price">%1$s TL</string>
+</resources>
