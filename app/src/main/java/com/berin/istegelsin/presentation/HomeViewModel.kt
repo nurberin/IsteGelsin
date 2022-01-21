@@ -14,9 +14,9 @@ class HomeViewModel(private val homeUseCase: HomeUseCase) : ViewModel() {
     private val _homeState:MutableStateFlow<HomeUIState> = MutableStateFlow(HomeUIState.idle)
     val homeState: StateFlow<HomeUIState> = _homeState
 
-    fun getRecipes(catId: String){
+    fun getRecipes(catId: String,keyword:String){
         viewModelScope.launch {
-            homeUseCase.recipes(catId)
+            homeUseCase.recipes(catId,keyword)
                 .onStart { _homeState.value=HomeUIState.Loading }
                 .catch { e->_homeState.value = HomeUIState.Error(e.message) }
                 .collect { base->
@@ -41,24 +41,14 @@ class HomeViewModel(private val homeUseCase: HomeUseCase) : ViewModel() {
         }
     }
 
-//    fun searchWithKeyword(keyword:String){
+//    fun getSearchResult(keyword:String){
 //        viewModelScope.launch {
 //            homeUseCase.recipes()
 //        }
 //    }
 
-   /* fun getSubCategories(){
-        viewModelScope.launch {
-            homeUseCase.categories()
-                .onStart { _homeState.value=HomeUIState.Loading }
-                .catch { e->_homeState.value=HomeUIState.Error(e.message) }
-                .collect { base ->
-                    when(base){
-                        is BaseResult.Success -> _homeState.value = HomeUIState.PageSuccessSubcategory(base.data)
-                    }
-                }
-        }
-    } */
+
+
 }
 
 sealed class HomeUIState {

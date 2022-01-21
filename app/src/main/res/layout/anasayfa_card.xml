@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="recipe"
             type="com.berin.istegelsin.domain.entity.Recipes" />
@@ -66,11 +67,13 @@
                             android:layout_height="20dp"
                             android:layout_marginEnd="@dimen/card_four"
                             android:layout_marginBottom="@dimen/card_four"
-                            android:visibility="invisible"
+                            android:layout_marginTop="-25dp"
                             android:onClick="@{(view) -> recipe.mainActivity.clickMethodMy(view,recipe)}"
+                            android:visibility="@{(recipe.itemCount == 0) ? View.VISIBLE : View.GONE}"
                             app:cardCornerRadius="@dimen/card_radius"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent">
+                            app:layout_constraintTop_toTopOf="@+id/card_sepet_arttir"
+                            app:layout_constraintEnd_toEndOf="@+id/anasayfaImageCard">
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -83,11 +86,11 @@
                             android:id="@+id/card_sepet_arttir"
                             android:layout_width="100dp"
                             android:layout_height="25dp"
+                            android:layout_marginTop="-25dp"
                             android:layout_marginEnd="@dimen/card_four"
                             android:layout_marginBottom="@dimen/card_four"
-                            android:visibility="visible"
                             app:cardCornerRadius="4dp"
-                            android:layout_marginTop="4dp"
+                            android:visibility="@{(recipe.itemCount > 0) ? View.VISIBLE : View.GONE}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
@@ -118,7 +121,9 @@
                                         android:layout_width="20dp"
                                         android:layout_height="18dp"
                                         android:layout_gravity="start"
-                                        android:src="@drawable/ic_delete" />
+                                        android:src="@drawable/ic_delete"
+                                        android:onClick="@{(view) -> recipe.mainActivity.clickDelete(view,recipe)}"
+                                        android:visibility="@{(recipe.itemCount == 1) ? View.VISIBLE : View.GONE}"/>
 
                                     <ImageView
                                         android:id="@+id/img_minus"
@@ -126,7 +131,8 @@
                                         android:layout_height="18dp"
                                         android:layout_gravity="start"
                                         android:src="@drawable/ic_minus"
-                                        android:visibility="invisible" />
+                                        android:onClick="@{(view) -> recipe.mainActivity.clickDelete(view,recipe)}"
+                                        android:visibility="@{(recipe.itemCount > 1) ? View.VISIBLE : View.GONE}"/>
 
                                 </androidx.cardview.widget.CardView>
 
@@ -135,7 +141,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
-                                    android:text="@{recipe.itemCount}"
+                                    android:text="@{Integer.toString(recipe.itemCount)}"
                                     android:textColor="@color/white"
                                     app:layout_constraintEnd_toStartOf="@+id/add"
                                     app:layout_constraintStart_toEndOf="@+id/delete"

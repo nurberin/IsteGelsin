@@ -21,11 +21,11 @@ class HomeUseCase(private val homeRepository: RecipeRepository) {
         }
     }
 
-    fun recipes(subcategoryID:String):Flow<BaseResult<List<Recipes>,RecipeResponse>>{
+    fun recipes(subcategoryID:String,keyword:String):Flow<BaseResult<List<Recipes>,RecipeResponse>>{
         return flow {
             emit(
                 BaseResult.Success(
-                    homeRepository.getAllRecipe(subcategoryID)
+                    homeRepository.getAllRecipe(subcategoryID,keyword)
                 )
             )
         }

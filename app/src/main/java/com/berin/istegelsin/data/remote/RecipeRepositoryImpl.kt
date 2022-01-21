@@ -23,8 +23,8 @@ class RecipeRepositoryImpl(private var recipesAPI: RecipesAPI):RecipeRepository 
         return listOf()
     }
 
-    override suspend fun getAllRecipe(subcategoryId: String?): List<Recipes> {
-        var recipeSearch = RecipeSearch(subcategoryId,"")
+    override suspend fun getAllRecipe(subcategoryId: String?, keyword: String?): List<Recipes> {
+        var recipeSearch = RecipeSearch(subcategoryId,keyword)
         val response = recipesAPI.getSearch(recipeSearch)
 
         if (response.isSuccessful){
@@ -42,8 +42,4 @@ class RecipeRepositoryImpl(private var recipesAPI: RecipesAPI):RecipeRepository 
         return listOf()
     }
 
-//    override suspend fun getSearch(keyword: String?): RecipeSearch {
-//        var recipeSearch = RecipeSearch
-//
-//    }
 }

@@ -1,6 +1,7 @@
 package com.berin.istegelsin.domain.entity
 
 import com.berin.istegelsin.MainActivity
+import com.berin.istegelsin.databinding.AnasayfaCardBinding
 
 data class Recipes(
     var id: String? = null,
@@ -8,6 +9,7 @@ data class Recipes(
     var imageUrl: String? = null,
     var price: Double? = null,
     var promotionDiscountPercentage: Double? = null,
-    var itemCount: String? = null,
-    var mainActivity: MainActivity? = null
+    var itemCount: Int = 0,
+    var mainActivity: MainActivity? = null,
+    var binding: AnasayfaCardBinding? = null
 ) : Entity()

@@ -25,13 +25,8 @@ import org.koin.android.ext.android.get
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding:ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private val homeViewModel: HomeViewModel = get()
-
-    internal fun click(view : View){
-
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,61 +37,104 @@ class MainActivity : AppCompatActivity() {
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                TODO("Not yet implemented")
+                query?.let {
+                    homeViewModel.getRecipes("", it)
+                    lifecycleScope.launch {
+                        homeViewModel.homeState.collect {
+                            when (it) {
+                                is HomeUIState.Success -> {
+                                    it.recipeList.let { recipes ->
+                                        recipes.forEach {
+                                            it.mainActivity = this@MainActivity
+                                        }
+                                        binding.recipeRv.adapter =
+                                            HomogeneousRecyclerAdapter<AnasayfaCardBinding, Recipes>(
+                                                recipes,
+                                                R.layout.anasayfa_card,
+                                                BR.recipe
+                                            ) {
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                TODO("Not yet implemented")
+                return false
             }
         })
 
         lifecycleScope.launch {
             homeViewModel.homeState.collect {
-                when(it){
-                    is HomeUIState.PageSuccessCategory ->{
+                when (it) {
+                    is HomeUIState.PageSuccessCategory -> {
 
                         it.categoryList.let {
-                            binding.subcategoryRv.adapter = HomogeneousRecyclerAdapter<SubcategoryItemBinding,Category>(it.get(0).subcategories!!,R.layout.subcategory_item,BR.subcategory) {
-                                homeViewModel.getRecipes(it.id!!)
-                            }
-                            binding.categoryRv.adapter = HomogeneousRecyclerAdapter<CategoryItemBinding,Category>(it,R.layout.category_item,BR.category)
-                            {
-                                binding.subcategoryRv.adapter = HomogeneousRecyclerAdapter<SubcategoryItemBinding,Category>(it.subcategories!!,R.layout.subcategory_item,BR.subcategory) {
-                                    homeViewModel.getRecipes(it.id!!)
+                            homeViewModel.getRecipes(it?.get(0)?.subcategories?.get(0)?.id!!, "")
+                            binding.subcategoryRv.adapter =
+                                HomogeneousRecyclerAdapter<SubcategoryItemBinding, Category>(
+                                    it.get(0).subcategories!!,
+                                    R.layout.subcategory_item,
+                                    BR.subcategory
+                                ) {
+                                    homeViewModel.getRecipes(it.id!!, "")
                                 }
-                            }
-                           // binding.subcategoryRv.adapter = HomogeneousRecyclerAdapter<SubcategoryItemBinding,Category>(it,R.layout.subcategory_item,BR.subcategory)
+                            binding.categoryRv.adapter =
+                                HomogeneousRecyclerAdapter<CategoryItemBinding, Category>(
+                                    it,
+                                    R.layout.category_item,
+                                    BR.category
+                                )
+                                {
+                                    binding.subcategoryRv.adapter =
+                                        HomogeneousRecyclerAdapter<SubcategoryItemBinding, Category>(
+                                            it.subcategories!!,
+                                            R.layout.subcategory_item,
+                                            BR.subcategory
+                                        ) {
+                                            homeViewModel.getRecipes(it.id!!, "")
+                                        }
+                                }
+                            // binding.subcategoryRv.adapter = HomogeneousRecyclerAdapter<SubcategoryItemBinding,Category>(it,R.layout.subcategory_item,BR.subcategory)
                         }
                     }
-                    is HomeUIState.Success ->{
+                    is HomeUIState.Success -> {
                         it.recipeList.let { recipes ->
 
                             recipes.forEach {
                                 it.mainActivity = this@MainActivity
-                                it.itemCount = "0"
                             }
-                            binding.recipeRv.adapter = HomogeneousRecyclerAdapter<AnasayfaCardBinding,Recipes>(recipes,R.layout.anasayfa_card,BR.recipe) {
-                            }
+                            binding.recipeRv.adapter =
+                                HomogeneousRecyclerAdapter<AnasayfaCardBinding, Recipes>(
+                                    recipes,
+                                    R.layout.anasayfa_card,
+                                    BR.recipe
+                                ) {
+                                }
                         }
                     }
-
                 }
-
             }
         }
         homeViewModel.getCategories()
     }
 
+    fun clickMethodMy(view: View, recipe: Recipes) {
 
-    fun clickMethodMy(view: View, recipe: Recipes){
-            println("clicklendi")
-            var tmp = recipe.itemCount?.toInt()
-//        if(tmp==0){
-//
-//        }
-            tmp = tmp?.plus(1)
-            recipe.itemCount =  tmp.toString()
-            binding.recipeRv.adapter?.notifyDataSetChanged()
+        recipe.itemCount = recipe.itemCount+ 1
+        binding.recipeRv.adapter?.notifyDataSetChanged()
+    }
 
+    fun clickDelete(view: View, recipe: Recipes) {
+
+        recipe.itemCount = recipe.itemCount - 1
+
+        if(recipe.itemCount < 0) recipe.itemCount = 0
+
+        binding.recipeRv.adapter?.notifyDataSetChanged()
     }
 }
