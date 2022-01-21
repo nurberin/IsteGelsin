@@ -13,7 +13,4 @@ class RecipeDTO (
     var price: Double? = null,
     @SerializedName("promotionDiscountPercentage")
     var promotionDiscountPercentage: Double? = null,
-
-var stock : Int? =null,
-    var discountedPrice: Float? = null,
 )

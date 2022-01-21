@@ -40,15 +40,6 @@ class HomeViewModel(private val homeUseCase: HomeUseCase) : ViewModel() {
                 }
         }
     }
-
-//    fun getSearchResult(keyword:String){
-//        viewModelScope.launch {
-//            homeUseCase.recipes()
-//        }
-//    }
-
-
-
 }
 
 sealed class HomeUIState {
