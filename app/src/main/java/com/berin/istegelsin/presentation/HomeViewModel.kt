@@ -35,7 +35,6 @@ class HomeViewModel(private val homeUseCase: HomeUseCase) : ViewModel() {
                 .collect { base ->
                     when(base){
                         is BaseResult.Success -> _homeState.value = HomeUIState.PageSuccessCategory(base.data)
-                        is BaseResult.Success -> _homeState.value = HomeUIState.PageSuccessSubcategory(base.data)
                     }
                 }
         }
@@ -45,10 +44,8 @@ class HomeViewModel(private val homeUseCase: HomeUseCase) : ViewModel() {
 sealed class HomeUIState {
     data class Success(val recipeList: List<Recipes>) : HomeUIState()
     data class Error(val error: String?) : HomeUIState()
-    data class PageSuccess(val recipeList: List<Recipes>) : HomeUIState()
     data class PageSuccessCategory(val categoryList: List<Category>) : HomeUIState()
-    data class PageSuccessSubcategory(val subcategoryList: List<Category>) : HomeUIState()
-    data class SearchSuccess (val recipeSearch: RecipeSearch) : HomeUIState()
+
     object idle : HomeUIState()
     object Loading : HomeUIState()
 }

@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                                     R.layout.category_item,
                                     BR.category
                                 )
-                                {
+                                {homeViewModel.getRecipes(it.subcategories?.get(0)?.id!!,"")
                                     binding.subcategoryRv.adapter =
                                         HomogeneousRecyclerAdapter<SubcategoryItemBinding, Category>(
                                             it.subcategories!!,
@@ -99,7 +99,6 @@ class MainActivity : AppCompatActivity() {
                                             homeViewModel.getRecipes(it.id!!, "")
                                         }
                                 }
-                            // binding.subcategoryRv.adapter = HomogeneousRecyclerAdapter<SubcategoryItemBinding,Category>(it,R.layout.subcategory_item,BR.subcategory)
                         }
                     }
                     is HomeUIState.Success -> {
@@ -124,17 +123,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun clickMethodMy(view: View, recipe: Recipes) {
-
         recipe.itemCount = recipe.itemCount+ 1
         binding.recipeRv.adapter?.notifyDataSetChanged()
     }
 
     fun clickDelete(view: View, recipe: Recipes) {
-
         recipe.itemCount = recipe.itemCount - 1
-
         if(recipe.itemCount < 0) recipe.itemCount = 0
-
         binding.recipeRv.adapter?.notifyDataSetChanged()
     }
 }
